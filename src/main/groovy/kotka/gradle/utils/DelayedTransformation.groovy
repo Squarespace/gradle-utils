@@ -13,13 +13,15 @@ import org.codehaus.groovy.control.SourceUnit
 import org.codehaus.groovy.transform.ASTTransformation
 import org.codehaus.groovy.transform.GroovyASTTransformation
 
+import java.lang.reflect.Modifier
+
 @GroovyASTTransformation(phase=CompilePhase.SEMANTIC_ANALYSIS)
 class DelayedTransformation implements ASTTransformation {
     void visit(ASTNode[] nodes, SourceUnit sourceUnit) {
         def fieldNode = nodes[1]
         def getterNode = new MethodNode(
                 "get${fieldNode.name.capitalize()}",
-                fieldNode.modifiers,
+                Modifier.PUBLIC,
                 fieldNode.type,
                 [] as Parameter[],
                 [] as ClassNode[],
