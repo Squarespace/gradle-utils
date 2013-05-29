@@ -18,6 +18,7 @@ import java.lang.reflect.Modifier
 @GroovyASTTransformation(phase=CompilePhase.SEMANTIC_ANALYSIS)
 class DelayedTransformation implements ASTTransformation {
     void visit(ASTNode[] nodes, SourceUnit sourceUnit) {
+        def delayNode = ClassHelper.make(Delay)
         def fieldNode = nodes[1]
         def getterNode = new MethodNode(
                 "get${fieldNode.name.capitalize()}",
@@ -27,7 +28,7 @@ class DelayedTransformation implements ASTTransformation {
                 [] as ClassNode[],
                 new ExpressionStatement(
                         new StaticMethodCallExpression(
-                                ClassHelper.make(Delay),
+                                delayNode,
                                 "force",
                                 new FieldExpression(fieldNode)
                         )
