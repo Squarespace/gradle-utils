@@ -21,11 +21,27 @@ class TestDelayed extends Specification {
         x = [ null, 1, "foo", "bar${1 + 1}", true, new Object(), { } ]
     }
 
-    def "getting a delay actually forces the delay"() {
+    def "getting a delayed property actually forces the delay"() {
         given:
         def o = new UnderTest()
         def effect = 0
         o.thing = new Delay({ effect += 1 })
+
+        expect:
+        effect  == 0
+
+        and:
+        o.thing == 1
+
+        and:
+        effect  == 1
+    }
+
+    def "delayed setting a delayed property reset the property"() {
+        given:
+        def o = new UnderTest()
+        def effect = 0
+        o.delayedThing = { effect += 1 }
 
         expect:
         effect  == 0
