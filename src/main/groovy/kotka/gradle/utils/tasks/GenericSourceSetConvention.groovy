@@ -12,13 +12,15 @@ class GenericSourceSetConvention {
     protected final UnionFileTree      allSource
     protected final PatternFilterable  sourcePatterns = new PatternSet()
 
-    GenericSourceSetConvention(String language, String pattern, String displayName,
-            FileResolver fileResolver) {
+    GenericSourceSetConvention(String language, List<String> patterns,
+            String displayName, FileResolver fileResolver) {
         def displayString = "${displayName} ${language} source"
 
         source = new DefaultSourceDirectorySet(displayString, fileResolver)
-        source.filter.include(pattern)
-        sourcePatterns.include(pattern)
+        patterns.each {
+            source.filter.include  it
+            sourcePatterns.include it
+        }
 
         allSource = new UnionFileTree(displayString,
             source.matching(sourcePatterns))
