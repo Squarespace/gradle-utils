@@ -30,6 +30,15 @@ import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy
 import java.lang.annotation.Target
 
+/**
+ * Marks a class field as "delayed". This injects the a special getter for
+ * the field, which forces the delayed value on retrieval.
+ *
+ * <p>
+ * Futhermore a new setter of the form <code>setDelayed&lt;fieldname&gt;</code>
+ * is injected. It will accept a <code>Closure</code> and install a Delay in the
+ * field.
+ */
 @Retention(RetentionPolicy.SOURCE)
 @Target([ElementType.FIELD])
 @GroovyASTTransformationClass(["kotka.gradle.utils.DelayedTransformation"])

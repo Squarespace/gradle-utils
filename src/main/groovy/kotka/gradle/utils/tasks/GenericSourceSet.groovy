@@ -30,6 +30,20 @@ import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy
 import java.lang.annotation.Target
 
+/**
+ * Extends a given class to be gradle source set convention. It makes
+ * <code>GenericSourceSetConvention</code> the super class of the annotated
+ * class and adds the given patterns. Various getters are added to allow the
+ * gradle extensions mechanism to work.
+ *
+ * <ul>
+ *     <li><code>get&lt;source name&gt;</code></li>
+ *     <li><code>getAll&lt;source name&gt;</code></li>
+ *     <li><code>get&lt;source name&gt;Patterns</code></li>
+ * </ul>
+ *
+ * @author Meikel Brandmeyer
+ */
 @Retention(RetentionPolicy.SOURCE)
 @Target([ElementType.TYPE])
 @GroovyASTTransformationClass(["kotka.gradle.utils.tasks.GenericSourceSetConventionTransformation"])

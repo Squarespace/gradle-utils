@@ -30,6 +30,21 @@ import org.gradle.api.internal.file.FileResolver
 import org.gradle.api.tasks.util.PatternFilterable
 import org.gradle.api.tasks.util.PatternSet
 
+/**
+ * A base class to extend gradle's <code>SourceSet</code>. Not to be
+ * used directly!
+ *
+ * <p>
+ * This class contains all necessary logic. Unfortunately the gradle
+ * extension mechanism is based in static class information. So you
+ * can't simply derive the class and be happy.
+ *
+ * <p>
+ * You should read the documentation on the <code>GenericSourceSet</code>
+ * annotation.
+ *
+ * @author Meikel Brandmeyer
+ */
 class GenericSourceSetConvention {
     protected final SourceDirectorySet source
     protected final UnionFileTree      allSource
