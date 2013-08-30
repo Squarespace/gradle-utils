@@ -16,7 +16,7 @@ class DelayedTransformation implements ASTTransformation {
 
         def definingClass = fieldNode.owner
 
-        definingClass.addMethod(ZweigBuilder.fromSpec([
+        definingClass.addMethod(ZweigBuilder.toNode([
                 method:     "get${fieldNode.name.capitalize()}",
                 returnType: fieldNode.type,
                 body: [
@@ -26,7 +26,7 @@ class DelayedTransformation implements ASTTransformation {
                 ]
         ]))
 
-        definingClass.addMethod(ZweigBuilder.fromSpec([
+        definingClass.addMethod(ZweigBuilder.toNode([
                 method:     "setDelayed${fieldNode.name.capitalize()}",
                 arguments:  [[fn: Object]],
                 returnType: ClassHelper.VOID_TYPE,

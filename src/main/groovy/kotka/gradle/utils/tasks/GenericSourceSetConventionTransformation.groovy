@@ -34,7 +34,7 @@ class GenericSourceSetConventionTransformation implements ASTTransformation {
         def target = nodes[1]
         target.setSuperClass ClassHelper.make(GenericSourceSetConvention)
 
-        target.addConstructor(ZweigBuilder.fromSpec([
+        target.addConstructor(ZweigBuilder.toNode([
                 constructor: [[displayName: String],
                               [fileResolver: FileResolver]],
                 body: [
@@ -45,7 +45,7 @@ class GenericSourceSetConventionTransformation implements ASTTransformation {
                 ]
         ]))
 
-        target.addMethod(ZweigBuilder.fromSpec([
+        target.addMethod(ZweigBuilder.toNode([
                 method:     "get${sourceNameC}",
                 returnType: SourceDirectorySet,
                 body: [
@@ -53,7 +53,7 @@ class GenericSourceSetConventionTransformation implements ASTTransformation {
                 ]
         ]))
 
-        target.addMethod(ZweigBuilder.fromSpec([
+        target.addMethod(ZweigBuilder.toNode([
                 method:     sourceName,
                 // FIXME: Object here is wrong, but I don't know
                 //        how to use target here.
@@ -72,7 +72,7 @@ class GenericSourceSetConventionTransformation implements ASTTransformation {
                 ]
         ]))
 
-        target.addMethod(ZweigBuilder.fromSpec([
+        target.addMethod(ZweigBuilder.toNode([
                 method:     "getAll${sourceNameC}",
                 returnType: FileTree,
                 body: [
@@ -80,7 +80,7 @@ class GenericSourceSetConventionTransformation implements ASTTransformation {
                 ]
         ]))
 
-        target.addMethod(ZweigBuilder.fromSpec([
+        target.addMethod(ZweigBuilder.toNode([
                 method:     "get${sourceNameC}SourcePatterns",
                 returnType: PatternFilterable,
                 body: [
