@@ -13,5 +13,7 @@ class ConfigureUtil {
             fn.call()
         else
             fn.call(target)
+
+        target
     }
 }
