@@ -2,8 +2,8 @@ package kotka.gradle.utils
 
 final class Delay {
     def private Closure fn
-    def exc = null
-    def value = null
+    def private exc = null
+    def private value = null
 
     Delay(Closure f) {
         fn = f
