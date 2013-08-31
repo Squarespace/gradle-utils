@@ -16,6 +16,23 @@ dependencies {
     }
 }
 
+task groovydocJar(type: Jar) {
+    appendix = "javadoc"
+    from project.groovydoc.outputs
+}
+
+task sourcesJar(type: Jar) {
+    appendix = "sources"
+    from(project.sourceSets.main.allSource) {
+        exclude "**/*.swp"
+    }
+}
+
+artifacts {
+    archives project.groovydocJar
+    archives project.sourcesJar
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = "1.7"
 }
