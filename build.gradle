@@ -1,3 +1,25 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url "http://clojars.org/repo" }
+    }
+
+    dependencies {
+        classpath "de.kotka.gradle:gradle-plugin:1.1.0"
+    }
+}
+
+version = "0.1.0-SNAPSHOT"
+group   = "de.kotka.gradle"
+
+description = "A set of utilities to ease the life of gradle plugin developers"
+
+ext.kotka = [
+    repository:     "kotkade/gradle-utils",
+    wrapperVersion: "1.7"
+]
+
+apply plugin: "kotka"
 apply plugin: "groovy"
 
 repositories {
@@ -31,8 +53,4 @@ task sourcesJar(type: Jar) {
 artifacts {
     archives project.groovydocJar
     archives project.sourcesJar
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = "1.7"
 }
