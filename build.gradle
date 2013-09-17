@@ -39,12 +39,12 @@ dependencies {
 }
 
 task groovydocJar(type: Jar) {
-    appendix = "javadoc"
+    classifier = "javadoc"
     from project.groovydoc.outputs
 }
 
 task sourcesJar(type: Jar) {
-    appendix = "sources"
+    classifier = "sources"
     from(project.sourceSets.main.allSource) {
         exclude "**/*.swp"
     }
