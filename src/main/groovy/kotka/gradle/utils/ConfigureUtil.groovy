@@ -42,10 +42,8 @@ class ConfigureUtil {
     static configure(Object target, Closure configureFn={}) {
         def fn = configureFn.clone()
 
-        fn.with {
-            resolveStrategy = Closure.DELEGATE_FIRST
-            delegate        = target
-        }
+        fn.resolveStrategy = Closure.DELEGATE_FIRST
+        fn.delegate        = target
 
         if (fn.maximumNumberOfParameters == 0)
             fn.call()
