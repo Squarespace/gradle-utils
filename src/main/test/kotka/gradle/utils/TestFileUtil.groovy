@@ -22,4 +22,13 @@ class TestFileUtil extends Specification {
         expect:
         FileUtil.file(parent, "b", "c", "d").equals(target)
     }
+
+    def "FileUtil.file also works with a parent file name"() {
+        given: "a parent file and a desired target"
+        def target = new File("a${File.separator"}b")
+
+        expect:
+        FileUtil.file("a", "b").equals(target)
+    }
+
 }

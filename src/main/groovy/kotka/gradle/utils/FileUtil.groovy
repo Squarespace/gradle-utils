@@ -44,4 +44,18 @@ class FileUtil {
             new File(p, segment)
         }
     }
+
+    /**
+     * Creates a child file under parent. It concatenates the given path
+     * segments together and return the inner most child entry.
+     *
+     * @param  parent   the parent filename
+     * @param  segments segments describing the path to the child entry
+     * @return          the child entry
+     */
+    static file(String parent, String... segments) {
+        segments.inject(new File(parent)) { p, segment ->
+            new File(p, segment)
+        }
+    }
 }
