@@ -38,6 +38,11 @@ dependencies {
     }
 }
 
+compileGroovy {
+    sourceCompatibility = "1.6"
+    targetCompatibility = "1.6"
+}
+
 task groovydocJar(type: Jar) {
     classifier = "javadoc"
     from project.groovydoc.outputs
