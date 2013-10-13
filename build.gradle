@@ -16,7 +16,7 @@ description = "A set of utilities to ease the life of gradle plugin developers"
 
 ext.kotka = [
     repository:     "kotkade/gradle-utils",
-    wrapperVersion: "1.7"
+    wrapperVersion: "1.8"
 ]
 
 apply plugin: "kotka"
