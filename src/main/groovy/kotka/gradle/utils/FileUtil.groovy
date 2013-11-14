@@ -58,4 +58,29 @@ class FileUtil {
             new File(p, segment)
         }
     }
+
+    /**
+     * Deletes the given file. Directories are deleted recursively.
+     *
+     * @param  file The file to be removed.
+     */
+    static void remove(File f) {
+        if (!f.exists())
+            return
+
+        if (f.isDirectory()) {
+            f.listFiles().each { remove(it) }
+        }
+
+        f.delete()
+    }
+
+    /**
+     * Deletes the given file. Directories are deleted recursively.
+     *
+     * @param  file The file to be removed.
+     */
+    static void remove(String f) {
+        remove(new File(f))
+    }
 }
