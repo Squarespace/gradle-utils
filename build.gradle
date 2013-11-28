@@ -22,6 +22,20 @@ ext.kotka = [
 apply plugin: "kotka"
 apply plugin: "groovy"
 
+sourceSets {
+    macros {
+        compileClasspath = project.sourceSets.main.compileClasspath
+    }
+}
+
+compileGroovy {
+    classpath = classpath.plus project.sourceSets.macros.output
+}
+
+compileTestGroovy {
+    classpath = classpath.plus project.sourceSets.macros.output
+}
+
 repositories {
     mavenCentral()
     maven { url "http://clojars.org/repo" }
@@ -43,6 +57,15 @@ compileGroovy {
     targetCompatibility = "1.6"
 }
 
+compileMacrosGroovy {
+    sourceCompatibility = "1.6"
+    targetCompatibility = "1.6"
+}
+
+groovydoc {
+    source project.sourceSets.macros.groovy
+}
+
 task groovydocJar(type: Jar) {
     classifier = "javadoc"
     from project.groovydoc.outputs
@@ -50,9 +73,9 @@ task groovydocJar(type: Jar) {
 
 task sourcesJar(type: Jar) {
     classifier = "sources"
-    from(project.sourceSets.main.allSource) {
-        exclude "**/*.swp"
-    }
+    from project.sourceSets.main.allSource
+    from project.sourceSets.macros.allSource
+    exclude "**/.*.swp"
 }
 
 artifacts {
