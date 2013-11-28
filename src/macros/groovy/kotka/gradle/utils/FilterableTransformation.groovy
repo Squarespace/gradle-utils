@@ -46,7 +46,6 @@ class FilterableTransformation implements ASTTransformation {
 
         thisClass.addField(ZweigBuilder.toNode([
             field:    fieldName,
-            modifier: ["private"],
             of:       thisClass,
             type:     PatternSet,
             init:     [construct: PatternSet]
