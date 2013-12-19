@@ -24,7 +24,10 @@
 package kotka.gradle.utils.tasks
 
 import kotka.gradle.utils.ConfigureUtil
+
 import kotka.groovy.zweig.ZweigBuilder
+import kotka.groovy.zweig.ZweigUtil
+
 import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.ast.ClassHelper
 import org.codehaus.groovy.ast.ClassNode
@@ -70,14 +73,8 @@ class GenericSourceSetConventionTransformation implements ASTTransformation {
 
         target.addMethod(ZweigBuilder.toNode([
                 method:     sourceName,
-                // FIXME: Object here is wrong, but I don't know
-                //        how to use target here.
-                //        mb - 12.06.2013
-                returnType: Object,
-                // FIXME: Object here is wrong, but I don't know
-                //        how to use Closure here.
-                //        mb - 12.06.2013
-                arguments:  [[fn: Object]],
+                returnType: ZweigUtil.nonGeneric(target),
+                arguments:  [[fn: Closure]],
                 body: [
                         [callStatic: "configure",
                          on:         ConfigureUtil,
