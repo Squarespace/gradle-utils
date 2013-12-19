@@ -33,6 +33,7 @@ import org.codehaus.groovy.transform.ASTTransformation
 import org.codehaus.groovy.transform.GroovyASTTransformation
 
 import org.gradle.api.tasks.util.PatternSet
+import org.gradle.api.tasks.util.PatternFilterable
 import org.gradle.api.specs.Spec
 
 @GroovyASTTransformation(phase=CompilePhase.SEMANTIC_ANALYSIS)
@@ -54,7 +55,7 @@ class FilterableTransformation implements ASTTransformation {
         [ "exclude", "include" ].each { op ->
             thisClass.addMethod(ZweigBuilder.toNode([
                     method:     op,
-                    returnType: thisClass,
+                    returnType: PatternFilterable,
                     arguments:  [[patterns: "[Ljava.lang.String;"]],
                     body: [
                             [call: op,
@@ -66,7 +67,7 @@ class FilterableTransformation implements ASTTransformation {
 
             thisClass.addMethod(ZweigBuilder.toNode([
                     method:     op,
-                    returnType: thisClass,
+                    returnType: PatternFilterable,
                     arguments:  [[patterns: Iterable]],
                     body: [
                             [call: op,
@@ -78,7 +79,7 @@ class FilterableTransformation implements ASTTransformation {
 
             thisClass.addMethod(ZweigBuilder.toNode([
                     method:     op,
-                    returnType: thisClass,
+                    returnType: PatternFilterable,
                     arguments:  [[spec: Spec]],
                     body: [
                             [call: op,
@@ -90,8 +91,8 @@ class FilterableTransformation implements ASTTransformation {
 
             thisClass.addMethod(ZweigBuilder.toNode([
                     method:     op,
-                    returnType: thisClass,
-                    arguments:  [[fn: Object]],
+                    returnType: PatternFilterable,
+                    arguments:  [[fn: Closure]],
                     body: [
                             [call: op,
                              on:   field,
@@ -111,7 +112,7 @@ class FilterableTransformation implements ASTTransformation {
 
             thisClass.addMethod(ZweigBuilder.toNode([
                     method:     "set${op.capitalize()}s",
-                    returnType: thisClass,
+                    returnType: PatternFilterable,
                     arguments:  [[patterns: Iterable]],
                     body: [
                             [call: "set${op.capitalize()}s",
@@ -121,5 +122,7 @@ class FilterableTransformation implements ASTTransformation {
                     ]
             ]))
         }
+
+        thisClass.addInterface(ClassHelper.make(PatternFilterable))
     }
 }
