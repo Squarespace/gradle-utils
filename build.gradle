@@ -71,6 +71,10 @@ groovydoc {
     source project.sourceSets.macros.groovy
 }
 
+jar {
+    from project.sourceSets.macros.output
+}
+
 task groovydocJar(type: Jar) {
     classifier = "javadoc"
     from project.groovydoc.outputs
