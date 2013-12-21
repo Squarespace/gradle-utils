@@ -49,7 +49,7 @@ dependencies {
     compile localGroovy()
     compile gradleApi()
 
-    compile "de.kotka.groovy:zweig:0.4.0-SNAPSHOT"
+    compile "de.kotka.groovy:zweig:0.4.0"
 
     testCompile('org.spockframework:spock-core:0.7-groovy-1.8') {
         exclude group: "org.codehaus.groovy", module: "groovy-all"
