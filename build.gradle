@@ -36,6 +36,10 @@ compileTestGroovy {
     classpath = classpath.plus project.sourceSets.macros.output
 }
 
+test {
+    classpath = classpath.plus project.sourceSets.macros.output
+}
+
 repositories {
     mavenCentral()
     maven { url "http://clojars.org/repo" }
