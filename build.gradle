@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "de.kotka.gradle:gradle-plugin:1.1.0"
+        classpath "de.kotka.gradle:gradle-plugin:1.2.0"
     }
 }
 
@@ -75,19 +75,6 @@ jar {
     from project.sourceSets.macros.output
 }
 
-task groovydocJar(type: Jar) {
-    classifier = "javadoc"
-    from project.groovydoc.outputs
-}
-
-task sourcesJar(type: Jar) {
-    classifier = "sources"
-    from project.sourceSets.main.allSource
+sourcesJar {
     from project.sourceSets.macros.allSource
-    exclude "**/.*.swp"
-}
-
-artifacts {
-    archives project.groovydocJar
-    archives project.sourcesJar
 }
