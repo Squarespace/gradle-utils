@@ -130,10 +130,6 @@ class SourceDirectoryTask extends DefaultTask {
     @InputFiles
     @SkipWhenEmpty
     def FileTree getSource() {
-        def sds = project.files(srcDirs).collect { project.fileTree(it) }
-
-        sds.tail().inject(sds.head()) { a, b ->
-            a.plus(b)
-        }.matching(filter)
+        project.files(srcDirs).asFileTree.matching(filter)
     }
 }
