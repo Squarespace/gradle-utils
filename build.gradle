@@ -28,7 +28,15 @@ sourceSets {
     }
 }
 
+compileMacrosGroovy {
+    sourceCompatibility = "1.6"
+    targetCompatibility = "1.6"
+}
+
 compileGroovy {
+    sourceCompatibility = "1.6"
+    targetCompatibility = "1.6"
+
     classpath = classpath.plus project.sourceSets.macros.output
 }
 
@@ -55,16 +63,6 @@ dependencies {
         exclude group: "org.codehaus.groovy", module: "groovy-all"
     }
     testCompile 'com.github.goldin:spock-extensions:0.1.4'
-}
-
-compileGroovy {
-    sourceCompatibility = "1.6"
-    targetCompatibility = "1.6"
-}
-
-compileMacrosGroovy {
-    sourceCompatibility = "1.6"
-    targetCompatibility = "1.6"
 }
 
 groovydoc {
