@@ -9,7 +9,7 @@ buildscript {
     }
 }
 
-version = "0.2.2-SNAPSHOT"
+version = "0.2.2"
 group   = "de.kotka.gradle"
 
 description = "A set of utilities to ease the life of gradle plugin developers"
