@@ -54,7 +54,7 @@ class GenericSourceSetConvention {
             String displayName, FileResolver fileResolver) {
         def displayString = "${displayName} ${language} source"
 
-        source = new DefaultSourceDirectorySet(displayString, fileResolver)
+        source = initSourceSet(displayString, fileResolver)
         patterns.each {
             source.filter.include  it
             sourcePatterns.include it
@@ -62,5 +62,9 @@ class GenericSourceSetConvention {
 
         allSource = new UnionFileTree(displayString,
             source.matching(sourcePatterns))
+    }
+
+    def protected initSourceSet(displayString, fileResolver) {
+        new DefaultSourceDirectorySet(displayString, fileResolver)
     }
 }
