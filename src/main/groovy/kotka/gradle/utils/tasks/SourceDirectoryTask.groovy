@@ -28,6 +28,7 @@ import kotka.gradle.utils.Filterable
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileTree
 import org.gradle.api.file.FileCollection
+import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.SkipWhenEmpty
 
@@ -98,6 +99,19 @@ class SourceDirectoryTask extends DefaultTask {
         /* XXX: Groovy bug in closure scoping. */
         def x = srcDirs
         dirs.each { x << it }
+        this
+    }
+
+    /**
+     * Add a source set to the tasks source. Note: this function adds a
+     * new root to already defined directories! The directories are
+     * subject to expansion according to <code>Project.files()</code>.
+     *
+     * @param  sourceSet The source set to add
+     * @return this
+     */
+    def from(SourceDirectorySet sourceSet) {
+        srcDirs << sourceSet
         this
     }
 
