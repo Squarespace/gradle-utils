@@ -39,6 +39,7 @@ import org.codehaus.groovy.transform.GroovyASTTransformation
 import org.gradle.api.file.FileTree
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.file.FileResolver
+import org.gradle.api.internal.file.collections.DirectoryFileTreeFactory
 import org.gradle.api.tasks.util.PatternFilterable
 
 @GroovyASTTransformation(phase=CompilePhase.SEMANTIC_ANALYSIS)
@@ -54,12 +55,14 @@ class GenericSourceSetConventionTransformation implements ASTTransformation {
 
         target.addConstructor(ZweigBuilder.toNode([
                 constructor: [[displayName: String],
-                              [fileResolver: FileResolver]],
+                              [fileResolver: FileResolver],
+                              [directoryFileTreeFactory: DirectoryFileTreeFactory]],
                 body: [
                         [construct: ClassNode.SUPER,
                          with:      [sourceName, patterns,
                                      [variable: "displayName"],
-                                     [variable: "fileResolver"]]]
+                                     [variable: "fileResolver"],
+                                     [variable: "directoryFileTreeFactory"]]]
                 ]
         ]))
 

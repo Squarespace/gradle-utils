@@ -27,6 +27,7 @@ import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.file.UnionFileTree
 import org.gradle.api.internal.file.DefaultSourceDirectorySet
 import org.gradle.api.internal.file.FileResolver
+import org.gradle.api.internal.file.collections.DirectoryFileTreeFactory
 import org.gradle.api.tasks.util.PatternFilterable
 import org.gradle.api.tasks.util.PatternSet
 
@@ -51,10 +52,11 @@ class GenericSourceSetConvention {
     protected final PatternFilterable  sourcePatterns = new PatternSet()
 
     GenericSourceSetConvention(String language, List<String> patterns,
-            String displayName, FileResolver fileResolver) {
+            String displayName, FileResolver fileResolver,
+            DirectoryFileTreeFactory directoryFileTreeFactory) {
         def displayString = "${displayName} ${language} source"
 
-        source = initSourceSet(displayString, fileResolver)
+        source = initSourceSet(displayString, fileResolver, directoryFileTreeFactory)
         patterns.each {
             source.filter.include  it
             sourcePatterns.include it
@@ -64,7 +66,7 @@ class GenericSourceSetConvention {
             source.matching(sourcePatterns))
     }
 
-    def protected initSourceSet(displayString, fileResolver) {
-        new DefaultSourceDirectorySet(displayString, fileResolver)
+    def protected initSourceSet(displayString, fileResolver, directoryFileTreeFactory) {
+        new DefaultSourceDirectorySet(displayString, fileResolver, directoryFileTreeFactory)
     }
 }

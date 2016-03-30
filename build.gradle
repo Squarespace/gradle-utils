@@ -9,14 +9,14 @@ buildscript {
     }
 }
 
-version = "0.2.2"
+version = "0.2.3-SNAPSHOT"
 group   = "de.kotka.gradle"
 
 description = "A set of utilities to ease the life of gradle plugin developers"
 
 ext.kotka = [
     repository:     "kotkade/gradle-utils",
-    wrapperVersion: "1.10"
+    wrapperVersion: "2.12"
 ]
 
 apply plugin: "kotka"
