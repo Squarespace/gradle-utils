@@ -100,18 +100,6 @@ task uploadArchivesSqsp(type: Upload) {
   }
 }
 
-uploadArchives {
-  repositories {
-    mavenDeployer {
-      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-      
-      repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-        authentication(userName: MAVEN_CENTRAL_USERNAME, password: MAVEN_CENTRAL_PASSWORD)
-      }
-    }
-  }
-}
-
 release {
   git {
     requireBranch = 'master'
@@ -121,6 +109,5 @@ release {
   failOnSnapshotDependencies = false
 }
 
-createReleaseTag.dependsOn ':uploadArchives'
-createReleaseTag.dependsOn ':uploadArchivesSqsp'
+createReleaseTag.dependsOn uploadArchivesSqsp
 
