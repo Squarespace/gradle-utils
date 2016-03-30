@@ -100,7 +100,7 @@ task uploadArchivesSqsp(type: Upload) {
   }
 }
 
-uploadArchives {
+task uploadArchivesCentral(type: Upload) {
   repositories {
     mavenDeployer {
       beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
@@ -121,5 +121,5 @@ release {
   failOnSnapshotDependencies = false
 }
 
-createReleaseTag.dependsOn ':uploadArchives', ':uploadArchivesSqsp'
+createReleaseTag.dependsOn ':uploadArchivesCentral', ':uploadArchivesSqsp'
 
