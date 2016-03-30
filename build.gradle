@@ -12,11 +12,14 @@ apply plugin: 'maven-publish'
 group = "de.kotka.gradle"
 
 repositories {
+
+  mavenLocal()
+  
   maven {
     url RELEASE_REPOSITORY_URL
   }
   
-  mavenLocal()
+  mavenCentral()
   maven { url "http://clojars.org/repo" }
 }
 
@@ -54,7 +57,7 @@ dependencies {
 
   testCompile 'org.codehaus.groovy:groovy-all:2.4.4'
   testCompile('org.spockframework:spock-core:1.0-groovy-2.4') {
-      exclude group: 'org.codehaus.groovy', module: 'groovy-all'
+    exclude group: 'org.codehaus.groovy', module: 'groovy-all'
   }
   testCompile 'com.github.goldin:spock-extensions:0.1.4'
 }
