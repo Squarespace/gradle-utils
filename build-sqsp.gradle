@@ -85,10 +85,24 @@ artifacts {
 //       ~/.gradle/gradle.properties file.
 
 publishing {
+
+  repositories {
+    maven {
+      url RELEASE_REPOSITORY_URL
+    }
+  }
+  
   publications {
     sqsp(MavenPublication) {
-      url RELEASE_REPOSITORY_URL
       from components.java
+      
+      artifact sourcesJar {
+        classifier 'sources'
+      }
+      
+      artifact javadocJar {
+        classifier 'javadoc'
+      }
     }
   }
 }
