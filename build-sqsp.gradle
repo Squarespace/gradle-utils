@@ -101,6 +101,8 @@ task uploadArchivesSqsp(type: Upload) {
 }
 
 task uploadArchivesCentral(type: Upload) {
+  configuration = configurations.archives
+
   repositories {
     mavenDeployer {
       beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
