@@ -88,42 +88,43 @@ signing {
 //       and 'MAVEN_CENTRAL_PASSWORD' values are stored in the 
 //       ~/.gradle/gradle.properties file.
       
-task uploadArchivesSqsp(type: Upload) {
-  configuration = configurations.archives
-  
-  repositories {
-    mavenDeployer {
-      if (project.hasProperty('RELEASE_REPOSITORY_URL') 
-          && project.hasProperty('SNAPSHOT_REPOSITORY_URL')) {
-          
-        repository(url: RELEASE_REPOSITORY_URL)
-        snapshotRepository(url: SNAPSHOT_REPOSITORY_URL)
-        
-      } else {
-        logger.error("RELEASE_REPOSITORY_URL and/or SNAPSHOT_REPOSITORY_URL missing.")
-      }
-    }
-  }
-}
+//task uploadArchivesSqsp(type: Upload) {
+//  configuration = configurations.archives
+//  
+//  repositories {
+//    
+//  }
+//}
 
 uploadArchives {
   repositories {
-    mavenDeployer {
-      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-      
-      if (project.hasProperty('MAVEN_CENTRAL_USERNAME') 
+  
+    if (project.hasProperty('MAVEN_CENTRAL_USERNAME') 
           && project.hasProperty('MAVEN_CENTRAL_PASSWORD')) {
-        
+          
+      mavenDeployer {
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
         repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
           authentication(userName: MAVEN_CENTRAL_USERNAME, password: MAVEN_CENTRAL_PASSWORD)
         }
-  
+        
         snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
           authentication(userName: MAVEN_CENTRAL_USERNAME, password: MAVEN_CENTRAL_PASSWORD)
         }
-      } else {
-        logger.error("MAVEN_CENTRAL_USERNAME and/or MAVEN_CENTRAL_PASSWORD missing.")
       }
+    } else {
+      logger.error("MAVEN_CENTRAL_USERNAME and/or MAVEN_CENTRAL_PASSWORD missing.")
+    }
+    
+    if (project.hasProperty('RELEASE_REPOSITORY_URL') 
+          && project.hasProperty('SNAPSHOT_REPOSITORY_URL')) {
+          
+      mavenDeployer {
+        repository(url: RELEASE_REPOSITORY_URL)
+        snapshotRepository(url: SNAPSHOT_REPOSITORY_URL)
+      }
+    } else {
+      logger.error("RELEASE_REPOSITORY_URL and/or SNAPSHOT_REPOSITORY_URL missing.")
     }
   }
 }
@@ -137,4 +138,4 @@ release {
   failOnSnapshotDependencies = false
 }
 
-createReleaseTag.dependsOn ':uploadArchives', ':uploadArchivesSqsp'
+createReleaseTag.dependsOn ':uploadArchives'//, ':uploadArchivesSqsp'
