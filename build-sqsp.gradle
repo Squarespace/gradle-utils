@@ -1,0 +1,108 @@
+version = "0.2.3"
+group = "com.squarespace.de.kotka.gradle"
+
+description = "A set of utilities to ease the life of gradle plugin developers"
+
+ext.kotka = [
+  repository: "kotkade/gradle-utils",
+  wrapperVersion: "2.12"
+]
+
+apply plugin: "groovy"
+apply plugin: 'signing'
+apply plugin: 'maven-publish'
+
+signing {
+  required { gradle.taskGraph.hasTask('publish') }
+  sign configurations.archives
+}
+  
+publishing {
+  repositories {
+  
+    // NOTE: The 'RELEASE_REPOSITORY_URL', 'MAVEN_CENTRAL_USERNAME' 
+    //       and 'MAVEN_CENTRAL_PASSWORD' values are stored in the 
+    //       ~/.gradle/gradle.properties file.
+        
+    if (project.hasProperty('MAVEN_CENTRAL_USERNAME') 
+        && project.hasProperty('MAVEN_CENTRAL_PASSWORD')) {
+        
+      maven {
+        url "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+        credentials {
+          username = MAVEN_CENTRAL_USERNAME
+          password = MAVEN_CENTRAL_PASSWORD
+        }
+      }
+    }
+    
+    if (project.hasProperty('RELEASE_REPOSITORY_URL')) {
+      maven {
+        url RELEASE_REPOSITORY_URL
+      }
+    }
+  }
+  
+  publications {
+    maven(MavenPublication) {
+      from components.java
+    }
+  }
+}
+
+sourceSets {
+  macros {
+    compileClasspath = project.sourceSets.main.compileClasspath
+  }
+}
+
+compileMacrosGroovy {
+  sourceCompatibility = '1.8'
+  targetCompatibility = '1.8'
+}
+
+compileGroovy {
+  sourceCompatibility = '1.8'
+  targetCompatibility = '1.8'
+
+  classpath = classpath.plus project.sourceSets.macros.output
+}
+
+compileTestGroovy {
+  classpath = classpath.plus project.sourceSets.macros.output
+}
+
+test {
+  classpath = classpath.plus project.sourceSets.macros.output
+}
+
+repositories {
+  mavenCentral()
+  maven { url "http://clojars.org/repo" }
+}
+
+dependencies {
+  compile localGroovy()
+  compile gradleApi()
+
+  compile "de.kotka.groovy:zweig:0.4.0"
+
+  testCompile 'org.codehaus.groovy:groovy-all:2.4.4'
+  testCompile('org.spockframework:spock-core:1.0-groovy-2.4') {
+      exclude group: 'org.codehaus.groovy', module: 'groovy-all'
+  }
+  testCompile 'com.github.goldin:spock-extensions:0.1.4'
+}
+
+jar {
+  from project.sourceSets.macros.output
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+  classifier = 'sources'
+  from project.sourceSets.macros.allSource
+}
+
+artifacts {
+  archives sourcesJar
+}
