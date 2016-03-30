@@ -12,8 +12,7 @@ ext.kotka = [
 ]
 
 apply plugin: "groovy"
-apply plugin: 'signing'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 sourceSets {
   macros {
@@ -81,21 +80,15 @@ artifacts {
   archives sourcesJar, javadocJar
 }
 
-signing {
-  sign configurations.archives
-}
-
 // NOTE: The 'RELEASE_REPOSITORY_URL', 'MAVEN_CENTRAL_USERNAME' 
 //       and 'MAVEN_CENTRAL_PASSWORD' values are stored in the 
 //       ~/.gradle/gradle.properties file.
-      
-task uploadArchivesSqsp(type: Upload) {
-  configuration = configurations.archives
-  
-  repositories {
-    mavenDeployer {
-      repository(url: RELEASE_REPOSITORY_URL)
-      snapshotRepository(url: SNAPSHOT_REPOSITORY_URL)
+
+publishing {
+  publications {
+    sqsp(MavenPublication) {
+      url RELEASE_REPOSITORY_URL
+      from components.java
     }
   }
 }
@@ -109,5 +102,5 @@ release {
   failOnSnapshotDependencies = false
 }
 
-createReleaseTag.dependsOn uploadArchivesSqsp
+createReleaseTag.dependsOn publish
 
