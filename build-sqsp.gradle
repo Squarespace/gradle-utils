@@ -63,6 +63,10 @@ jar {
   from project.sourceSets.macros.output
 }
 
+groovydoc {
+  source project.sourceSets.macros.groovy
+}
+
 task sourcesJar(type: Jar, dependsOn: classes) {
   classifier = 'sources'
   from project.sourceSets.macros.allSource
@@ -74,7 +78,7 @@ task javadocJar(type: Jar, dependsOn: groovydoc) {
 }
 
 artifacts {
-  archives jar, sourcesJar, javadocJar
+  archives sourcesJar, javadocJar
 }
 
 signing {
