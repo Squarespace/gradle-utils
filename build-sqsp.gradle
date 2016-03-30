@@ -70,17 +70,15 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 
 task javadocJar(type: Jar, dependsOn: groovydoc) {
   classifier = 'javadoc'
-  from javadoc.destinationDir
+  from groovydoc
 }
 
 artifacts {
-  archives jar
-  archives sourcesJar
-  archives javadocJar
+  archives jar, sourcesJar, javadocJar
 }
 
 signing {
-  required { gradle.taskGraph.hasTask('uploadArchives') }
+  //required { gradle.taskGraph.hasTask('uploadArchives') }
   sign configurations.archives
 }
 
@@ -92,36 +90,24 @@ task uploadArchivesSqsp(type: Upload) {
   configuration = configurations.archives
   
   repositories {
-    if (project.hasProperty('RELEASE_REPOSITORY_URL') 
-          && project.hasProperty('SNAPSHOT_REPOSITORY_URL')) {
-          
-      mavenDeployer {
-        repository(url: RELEASE_REPOSITORY_URL)
-        snapshotRepository(url: SNAPSHOT_REPOSITORY_URL)
-      }
-    } else {
-      logger.error("RELEASE_REPOSITORY_URL and/or SNAPSHOT_REPOSITORY_URL missing.")
+    mavenDeployer {
+      repository(url: RELEASE_REPOSITORY_URL)
+      snapshotRepository(url: SNAPSHOT_REPOSITORY_URL)
     }
   }
 }
 
 uploadArchives {
   repositories {
-    if (project.hasProperty('MAVEN_CENTRAL_USERNAME') 
-          && project.hasProperty('MAVEN_CENTRAL_PASSWORD')) {
-          
-      mavenDeployer {
-        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-        repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-          authentication(userName: MAVEN_CENTRAL_USERNAME, password: MAVEN_CENTRAL_PASSWORD)
-        }
-        
-        snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
-          authentication(userName: MAVEN_CENTRAL_USERNAME, password: MAVEN_CENTRAL_PASSWORD)
-        }
+    mavenDeployer {
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+      repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+        authentication(userName: MAVEN_CENTRAL_USERNAME, password: MAVEN_CENTRAL_PASSWORD)
       }
-    } else {
-      logger.error("MAVEN_CENTRAL_USERNAME and/or MAVEN_CENTRAL_PASSWORD missing.")
+      
+      snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
+        authentication(userName: MAVEN_CENTRAL_USERNAME, password: MAVEN_CENTRAL_PASSWORD)
+      }
     }
   }
 }
@@ -135,4 +121,12 @@ release {
   failOnSnapshotDependencies = false
 }
 
-createReleaseTag.dependsOn ':uploadArchives', ':uploadArchivesSqsp'
+if (project.hasProperty('MAVEN_CENTRAL_USERNAME') 
+    && project.hasProperty('MAVEN_CENTRAL_PASSWORD')) {
+  createReleaseTag.dependsOn ':uploadArchives'
+}
+
+if (project.hasProperty('RELEASE_REPOSITORY_URL') 
+    && project.hasProperty('SNAPSHOT_REPOSITORY_URL')) {
+  createReleaseTag.dependsOn ':uploadArchivesSqsp'
+}
