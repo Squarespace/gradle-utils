@@ -137,4 +137,4 @@ release {
   failOnSnapshotDependencies = false
 }
 
-createReleaseTag.dependsOn ':uploadArchives' ':uploadArchivesSqsp'
+createReleaseTag.dependsOn ':uploadArchives', ':uploadArchivesSqsp'
