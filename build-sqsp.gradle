@@ -121,12 +121,6 @@ release {
   failOnSnapshotDependencies = false
 }
 
-if (project.hasProperty('MAVEN_CENTRAL_USERNAME') 
-    && project.hasProperty('MAVEN_CENTRAL_PASSWORD')) {
-  createReleaseTag.dependsOn ':uploadArchives'
-}
+createReleaseTag.dependsOn ':uploadArchives'
+createReleaseTag.dependsOn ':uploadArchivesSqsp'
 
-if (project.hasProperty('RELEASE_REPOSITORY_URL') 
-    && project.hasProperty('SNAPSHOT_REPOSITORY_URL')) {
-  createReleaseTag.dependsOn ':uploadArchivesSqsp'
-}
