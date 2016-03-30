@@ -121,6 +121,6 @@ release {
   failOnSnapshotDependencies = false
 }
 
-release.dependsOn assemble
+release.dependsOn ':assemble'
 createReleaseTag.dependsOn ':uploadArchivesCentral', ':uploadArchivesSqsp'
 
