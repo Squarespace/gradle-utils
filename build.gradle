@@ -1,78 +1,96 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url "http://clojars.org/repo" }
-    }
-
-    dependencies {
-        classpath "de.kotka.gradle:gradle-plugin:1.2.0"
-    }
+plugins {
+  id 'net.researchgate.release' version '2.3.4'
 }
 
-version = "0.2.3-SNAPSHOT"
-group   = "de.kotka.gradle"
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.12'
+}
 
-description = "A set of utilities to ease the life of gradle plugin developers"
-
-ext.kotka = [
-    repository:     "kotkade/gradle-utils",
-    wrapperVersion: "2.12"
-]
-
-apply plugin: "kotka"
 apply plugin: "groovy"
+apply plugin: 'maven-publish'
+
+group = "de.kotka.gradle"
+
+repositories {
+  maven {
+    url RELEASE_REPOSITORY_URL
+  }
+  
+  mavenLocal()
+  maven { url "http://clojars.org/repo" }
+}
 
 sourceSets {
-    macros {
-        compileClasspath = project.sourceSets.main.compileClasspath
-    }
+  macros {
+    compileClasspath = project.sourceSets.main.compileClasspath
+  }
 }
 
 compileMacrosGroovy {
-    sourceCompatibility = "1.6"
-    targetCompatibility = "1.6"
+  sourceCompatibility = '1.8'
+  targetCompatibility = '1.8'
 }
 
 compileGroovy {
-    sourceCompatibility = "1.6"
-    targetCompatibility = "1.6"
+  sourceCompatibility = '1.8'
+  targetCompatibility = '1.8'
 
-    classpath = classpath.plus project.sourceSets.macros.output
+  classpath = classpath.plus project.sourceSets.macros.output
 }
 
 compileTestGroovy {
-    classpath = classpath.plus project.sourceSets.macros.output
+  classpath = classpath.plus project.sourceSets.macros.output
 }
 
 test {
-    classpath = classpath.plus project.sourceSets.macros.output
-}
-
-repositories {
-    mavenCentral()
-    maven { url "http://clojars.org/repo" }
+  classpath = classpath.plus project.sourceSets.macros.output
 }
 
 dependencies {
-    compile localGroovy()
-    compile gradleApi()
+  compile localGroovy()
+  compile gradleApi()
 
-    compile "de.kotka.groovy:zweig:0.4.0"
+  compile "de.kotka.groovy:zweig:0.4.0"
 
-    testCompile('org.spockframework:spock-core:0.7-groovy-1.8') {
-        exclude group: "org.codehaus.groovy", module: "groovy-all"
-    }
-    testCompile 'com.github.goldin:spock-extensions:0.1.4'
-}
-
-groovydoc {
-    source project.sourceSets.macros.groovy
+  testCompile 'org.codehaus.groovy:groovy-all:2.4.4'
+  testCompile('org.spockframework:spock-core:1.0-groovy-2.4') {
+      exclude group: 'org.codehaus.groovy', module: 'groovy-all'
+  }
+  testCompile 'com.github.goldin:spock-extensions:0.1.4'
 }
 
 jar {
-    from project.sourceSets.macros.output
+  from project.sourceSets.macros.output
 }
 
-sourcesJar {
-    from project.sourceSets.macros.allSource
+// NOTE: The 'RELEASE_REPOSITORY_URL', 'MAVEN_CENTRAL_USERNAME' 
+//       and 'MAVEN_CENTRAL_PASSWORD' values are stored in the 
+//       ~/.gradle/gradle.properties file.
+
+publishing {
+
+  repositories {
+    maven {
+      url RELEASE_REPOSITORY_URL
+    }
+  }
+  
+  publications {
+    sqsp(MavenPublication) {
+      groupId "com.squarespace.${group}"
+      from components.java
+    }
+  }
 }
+
+release {
+  git {
+    requireBranch = 'master'
+  }
+  
+  failOnUpdateNeeded = false
+  failOnSnapshotDependencies = false
+}
+
+createReleaseTag.dependsOn publish
+
